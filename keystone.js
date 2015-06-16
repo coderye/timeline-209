@@ -10,11 +10,11 @@ var keystone = require('keystone');
 // and documentation.
 
 keystone.init({
-
+	'port':'12345',
 	'name': 'TJTimeline',
 	'brand': 'TJTimeline',
-	
-	'sass': 'public',
+	'mongo':'mongodb://10.60.103.200/tjtimeline',
+	//'sass': 'public',
 	'static': 'public',
 	'favicon': 'public/favicon.ico',
 	'views': 'templates/views',
@@ -24,7 +24,9 @@ keystone.init({
 	'session': true,
 	'auth': true,
 	'user model': 'User',
-	'cookie secret': '`H,Sh?CT`uI9?{{_i`E3w-bdi:GOy;8xs-`PK76e]DTR-l0~42I9Nf^eF|Aq-P@f'
+	'cookie secret': '`H,Sh?CT`uI9?{{_i`E3w-bdi:GOy;8xs-`PK76e]DTR-l0~42I9Nf^eF|Aq-P@f',
+	'wysiwyg images':true,
+	'wysiwyg additional':'blockquote fullscreen'
 
 });
 
@@ -53,8 +55,9 @@ keystone.set('routes', require('./routes'));
 // Configure the navigation bar in Keystone's Admin UI
 
 keystone.set('nav', {
-	'文章': ['posts', 'post-categories'],
-	'用户': 'users'
+	'Posts': ['posts', 'post-categories'],
+	'Images':['images'],
+	'Users': 'users'
 });
 
 // Start Keystone to connect to your database and initialise the web server

@@ -17,6 +17,31 @@ exports = module.exports = function(req, res) {
 	};
 	
 
+	view.on('init', function(next) {
+		
+		keystone.list('PostCategory').model.find().exec(function(err, results) {
+			//console.log(results);
+			if (err || !results.length) {
+				return next(err);
+			}
+			
+			locals.data.categories = results;
+			
+			// Load the counts for each category
+			async.each(locals.data.categories, function(category, next) {
+               
+				keystone.list('Post').model.count().where('category').in([category.id]).exec(function(err, count) {
+					category.postCount = count;
+					next(err);
+				});
+              
+			}, function(err) {
+				next(err);
+			});
+			
+		});
+		
+	});
 	
 	// Load the current category filter
 	view.on('init', function(next) {
@@ -36,11 +61,7 @@ exports = module.exports = function(req, res) {
 	// Load the posts
 	view.on('init', function(next) {
 		
-		var q = keystone.list('Post').paginate({
-				page: req.query.page || 1,
-				perPage: 10,
-				maxPages: 10
-			})
+		var q = keystone.list('Post').model.find()
 			.where('state', 'published')
 			.sort('-publishedDate')
 			.populate('categories');
@@ -50,6 +71,7 @@ exports = module.exports = function(req, res) {
 		}
 		
 		q.exec(function(err, results) {
+			console.log(results);
 			locals.data.posts = results;
 			next(err);
 		});

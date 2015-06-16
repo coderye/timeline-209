@@ -11,19 +11,25 @@ mixin post(post)
 			.inner
 				h2 #{post.title}
 				div!= post.content.brief
-					.tags
-						if post.categories && post.categories.length
-							| 标签： 
-							each cat, cat_i in post.categories
-								a(href='/timeline/' + cat.key)= cat.name
-								if cat_i < post.categories.length - 1
-									| , 
-								else
-									| 
 				if post.content.extended
-					a.read-more(href='/post/' + post.slug)  查看详情
+					a.read-more(href='/timeline/post/' + post.slug)  查看详情
+				.tags
+					if post.categories && post.categories.length
+						| 标签： 
+						each cat, cat_i in post.categories
+							a(href='/timeline/' + cat.key)= cat.name
+							if cat_i < post.categories.length - 1
+								| , 
+							else
+								| 
+				
 		
 block intro
+	if data.categories.length
+		.list-group
+			a(href='/timeline', class=!data.category ? 'active' : false).list-group-item 所有
+			each cat in data.categories
+				a(href='/timeline/' + cat.key, class=data.category && data.category.id == cat.id ? 'active' : false).list-group-item=cat.name
 	.container.title
 		h1= data.category ? data.category.name : '所有时间线'
 
@@ -33,15 +39,14 @@ block content
 			if filters.category && !data.category
 				h3.text-muted 无效的标签。
 			else
-				if data.posts.results.length
+				if data.posts.length
 					.blog
 						- var p = false;
 						- var tmp =[];
-						each post in data.posts.results
+						each post in data.posts
 							- p=!p;
 							- var month =11*post.publishedDate.getFullYear()+post.publishedDate.getUTCMonth();
 							- if(tmp.indexOf(month)<0)
-								-console.log('new');
 								-tmp.push(month);
 								.maindate.tofade: span!=post._.publishedDate.format('YYYY年MM月')
 							- endif
