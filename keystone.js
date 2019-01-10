@@ -13,7 +13,7 @@ keystone.init({
 	'port':'12345',
 	'name': 'TJTimeline',
 	'brand': 'TJTimeline',
-	'mongo':'mongodb://10.60.103.200/tjtimeline',
+	'mongo':'mongodb://10.60.144.30/tjtimeline',
 	//'sass': 'public',
 	'static': 'public',
 	'favicon': 'public/favicon.ico',
